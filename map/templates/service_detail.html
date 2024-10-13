@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .containerr {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    p {
+        margin-bottom: 10px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        text-align: center;
+        background-color: #ec623c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        margin-right: 10px;
+    }
+
+    .btn:hover {
+        background-color: #e04e27;
+    }
+</style>
+
+<div class="containerr">
+    <div class="custom-border shadow p-3 mb-5 bg-white rounded" style="border: 1px solid orange;">
+
+    <h2>{{ service.titre }}</h2>
+    <p>Address: {{ service.address }}</p>
+    <p>Telephone: {{ service.telephone }}</p>
+    <p>Hours: {{ service.hours }}</p>
+    {% if user.is_authenticated and user.is_superuser %} 
+    <a href="{% url 'service_edit' service.pk %}" class="btn btn-secondary" style="text-decoration: none; ">Modifier</a>
+    <a href="{% url 'service_delete' service.pk %}" class="btn btn-secondary" style="text-decoration: none;margin-left:10px;">Supprimer</a>
+    <br>{% endif %}
+    <a href="{% url 'service_list' %}" class="btn btn-secondary" style="text-decoration: none; margin-left:10px;">Retour à la liste des services</a>
+    <br/>
+    
+</div></div>
+
+{% endblock content %}
+{% endblock body %}

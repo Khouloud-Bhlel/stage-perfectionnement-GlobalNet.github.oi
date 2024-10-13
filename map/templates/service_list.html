@@ -1,0 +1,595 @@
+{% load crispy_forms_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Agency globalnet</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="{% static 'dist/css/animate.css' %}">
+    </head>
+    
+
+    <style>
+      @media screen and (max-width: 1250px) {
+        /* Adjust this value based on your desired zoom level */
+        .navbar-nav.zoom67 {
+          display: flex;
+          align-items: center;
+        }
+    
+        .navbar-nav.zoom67 .nav-item {
+          margin-right: 15px;
+        }
+    
+        /* Add some space between the links and buttons */
+        .navbar-nav.zoom67 .nav-item:last-child {
+          margin-right: 30px;
+        }
+      }
+      .btn-primary {
+          --bs-btn-color: #fff;
+          --bs-btn-bg: #ffc800;
+          --bs-btn-border-color: #ffc800;
+          --bs-btn-hover-color: #fff;
+          --bs-btn-hover-bg: #d9aa00;
+          --bs-btn-hover-border-color: #cca000;
+          --bs-btn-focus-shadow-rgb: 255, 208, 38;
+          --bs-btn-active-color: #fff;
+          --bs-btn-active-bg: #cca000;
+          --bs-btn-active-border-color: #bf9600;
+          --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+          --bs-btn-disabled-color: #fff;
+          --bs-btn-disabled-bg: #ffc800;
+          --bs-btn-disabled-border-color: #ffc800;
+        }
+        .btn-xl {
+          padding: 1.25rem 2.5rem;
+          font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+          font-size: 1.125rem;
+          font-weight: 700;
+        }
+        .text-uppercase {
+          text-transform: uppercase !important;
+        }
+    </style>
+
+  <body id="page-top">
+      <!-- Navigation-->
+
+      <style>
+          .navbar-scrolled {
+            background-color: black; /* Change this to the desired color */
+          }
+         
+              .navbar-nav {
+                flex-direction: row; /* Set the flex-direction to horizontal */
+                justify-content: center; /* Center the list items horizontally */
+                align-items: center; /* Center the list items vertically */
+              }
+            
+              .navbar-nav .nav-item {
+                margin: 0 70px; /* Add some spacing between the list items */
+              }
+            
+              .navbar-nav .nav-link {
+                padding: 10px; /* Add padding to the links for better spacing */
+              }
+         
+            
+        </style>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-black "  id="mainNav">
+          <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+              Menu
+              <i class="fas fa-bars ms-1"></i>
+            </button>
+            <div class="collapse navbar-collapse wow flipInX" id="navbarResponsive">
+              <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0 navbar-nav">
+                <li class="nav-item wow flipInX"><a class="nav-link wow flipInX" href="/" >Map</a></li>
+                <li class="nav-item wow flipInX"><a class="nav-link wow flipInX" href="/services">Services</a></li>
+                <li class="nav-item wow flipInX"><a class="nav-link wow flipInX" href="/gestion_en_ligne">Commende</a></li>
+                <li class="nav-item wow flipInX"><a class="nav-link wow flipInX" href="#about">About</a></li>
+                <li class="nav-item wow flipInX"><a class="nav-link wow flipInX" href="#contact">Contact</a></li>
+                <li class="nav-item">
+                  {% if user.is_authenticated and user.username == "admin" %}
+                  <a href="/administrator" style="color: white; font-weight: bold; text-shadow: 0 0 5px white; font-size: 22px;">Hi {{user.username}}</a>
+                  <a href="/signout" class="btn btn-danger">Logout</a>
+                  {% elif user.is_authenticated and user.username%}
+                  <p style="color: white; font-weight: bold; text-shadow: 0 0 5px white; font-size: 22px;">Hi {{ user.username }}!</p>
+                  <a href="/signout" class="btn btn-danger">Logout</a>
+                  {% else %}
+                  <div class="d-flex">
+                    <a href="/signin" class="btn btn-warning me-2"><span class="glyphicon glyphicon-log-in"></span>Login</a>
+                    <a href="/signup" class="btn btn-success">Signup</a>
+                  </div>
+                  {% endif %}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+      <script>
+          // JavaScript function to toggle the visibility of the navigation bar
+          function toggleNavbar() {
+              $('#mainNav').toggle();
+          }
+      </script>
+      <!-- Masthead-->
+      <header class="masthead">
+          <div class="container">
+              <div class="masthead-subheading wow tada" >Welcome To Our Studio!</div>
+              <div class="masthead-heading text-uppercase wow tada" data-wow-duration="2s" >It's Nice To Meet You</div>
+              <a class="btn btn-primary btn-xl text-uppercase" href="/services">Tell Me More</a>
+          </div>
+      </header>
+        
+        <style>
+          .masthead .btn {
+            background: linear-gradient(45deg, #f5c840, #ec623c);
+            color: white;
+          }
+        </style>
+        
+  <style>
+    /* Custom styles for the select dropdown */
+    .optionbox {
+      position: relative;
+      display: inline-block;
+      background: #f5c840;
+      border-radius: 5px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+  
+    .optionbox select {
+      appearance: none;
+      -webkit-appearance: none;
+      background: linear-gradient(45deg, #f5c840, #ec623c);
+      color: black;
+      padding: 10px;
+      width: 250px;
+      height: 50px;
+      border: none;
+      font-size: 20px;
+      outline: none;
+    }
+  
+    .optionbox:before {
+      content: '\f358';
+      font-family: "Font Awesome 5 free";
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 50px;
+      width: 50px;
+      background: #ffc800;
+      text-align: center;
+      line-height: 50px;
+      color: #fff;
+      font-size: 30px;
+      pointer-events: none;
+    }
+  
+    .optionbox:hover:before {
+      background:  #ffc800;
+    }
+  
+    /* Custom styles for the search button */
+    #btn {
+      background: #ffc800;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      font-size: 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+  
+    #btn:hover {
+      background: #ffc800;
+    }
+    
+  </style>
+  
+    
+<br>
+
+<h1 class="text-center wow tada" style="text-shadow: 0 0 1rem orange;" >...Liste des services...</h1>
+<br><br>
+<div class="row justify-content-center" >
+  <div class="elmt col-lg-2 col-md-2 col-sm-2 col-xs-6 text-center">
+    <!-- Contenu de la div -->
+    <div class="optionbox">
+      <select  name="gouvernorat" id="gouvernorat" onchange="searchService()" >
+        <option value="Gouvernorat">Gouvernorat</option>
+            <option value="ARIANA">ARIANA</option>
+            <option value="BEJA">BEJA</option>
+            <option value="BEN AROUS">BEN AROUS</option>
+            <option value="BIZERTE">BIZERTE</option>
+            <option value="GABES">GABES</option>
+            <option value="GAFSA">GAFSA</option>
+            <option value="JENDOUBA">JENDOUBA</option>
+            <option value="KAIROUAN">KAIROUAN</option>
+            <option value="KASSERINE">KASSERINE</option>
+            <option value="KEBILI">KEBILI</option>
+            <option value="KEF">KEF</option>
+            <option value="MAHDIA">MAHDIA</option>
+            <option value="MANOUBA">MANOUBA</option>
+            <option value="MEDENINE">MEDENINE</option>
+            <option value="MONASTIR">MONASTIR</option>
+            <option value="NABEUL">NABEUL</option>
+            <option value="SFAX">SFAX</option>
+            <option value="SIDI BOUZID">SIDI BOUZID</option>
+            <option value="SILIANA">SILIANA</option>
+            <option value="SOUSSE">SOUSSE</option>
+            <option value="TATAOUINE">TATAOUINE</option>
+            <option value="TOZEUR">TOZEUR</option>
+            <option value="TUNIS">TUNIS</option>
+            <option value="ZAGHOUAN">ZAGHOUAN</option>
+        </select>
+    </div>
+</div>
+
+<div class="elmt col-lg-2 col-md-2 col-sm-2 col-xs-6 text-center">
+  <div class="optionbox">
+    <select name="ville" id="ville" onchange="searchService()">
+      <option value="Localité"selected="" >Localité</option>
+                <option value="ARIANA" >ARIANA</option>
+                <option value="BORJ LOUZIR">BORJ LOUZIR</option>
+                <option value="CITE ETTADAMAN">CITE ETTADAMAN</option>
+                <option value="EL MENZAH 6">EL MENZAH 6</option>
+                <option value="ENNASR">ENNASR</option>
+                <option value="NKHILET">NKHILET</option>
+            </select>
+      
+      </div>    </div>
+
+    
+      <div class="elmt col-lg-2 col-md-2 col-sm-2 col-xs-6 text-center">
+     <div class="optionbox">
+    <select  name="pdv" id="pdv" onchange="searchService()">
+     <option value="Type">Type</option>
+            <option value="Agence">Agence</option>
+            <option value="Revendeur">Revendeur</option>
+        </select>
+        
+    </div> </div>
+    <button id="btn" type="button" class="buttons elmt col-lg-2 col-md-2 col-sm-2 col-xs-6 text-center" style="background: #ffc800;
+    color: #fff;
+    padding: 10px;
+    width: 250px;
+    height: 50px;
+    border: none;
+    font-size: 20px;
+    box-shadow: 0 5px 48px rgb(93, 15, 9);
+    -webkit-appearance: button;
+    outline: none;" onclick="searchServices()">Chercher</button>
+
+
+</div>
+<br>
+<style>
+  .service-item {
+    transition: box-shadow 0.3s ease; /* Smooth transition for the shadow effect */
+    border: 2px solid #000; /* Replace #000 with the desired black color code */
+    padding: 10px; /* Add padding to create space inside the service item */
+    margin-bottom: 20px; /* Add margin at the bottom to create space between service items */
+    margin-left: 20px;
+    width: calc(33.33% - 20px); 
+  }
+
+  .service-item:focus {
+    outline: none; /* Remove the default focus outline */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add shadow when focused */
+  }
+
+  /* Add the gray border to the service items when hovered */
+  .service-item:hover {
+    border-color: #777; /* Replace #777 with the desired gray color code */
+    background-color:  #777;
+    color:  white;
+  }
+  .service-item h2 {
+    font-size: 20px;
+    color: gray; 
+    text-shadow: 2px 2px 4px white; /* Adjust the text shadow properties as needed */
+  }
+
+  /* Styles for h2 elements when they are hovered */
+  .service-item:hover h2 {
+    color: yellow;
+    text-shadow: 2px 2px 4px black; /* Change the text shadow to black on hover */
+  }
+
+</style>
+
+<div class="container">
+  <div class="row">
+    <!-- Map div -->
+    <div id="service-container" class="col-lg-12 col-md-12 col-sm-12 border border-dark rounded" style="display: none;"></div>
+    {% for service in services %}
+<div class="col-lg-4 col-md-6 col-sm-12 border border-dark rounded service-item" data-gouvernorat="{{ service.gouvernorat }}" data-ville="{{ service.ville }}" data-pdv="{{ service.pdv }}">
+    <h2 style="color: #ec623c;">{{ service.titre }}</h2>
+    <p>Adresse : {{ service.address }}</p>
+    <p>Téléphone : {{ service.telephone }}</p>
+    <p>Horaires :<br>{{ service.hours|linebreaksbr }}</p>
+    {% if user.is_authenticated and user.username != "admin" %}
+    <a href="{% url 'service_detail' service.pk %}" class="btn btn-warning" role="button" style="text-decoration: none;">Voir détails</a>
+    {% endif %}
+    <button class="btn btn-warning location-button" data-popup="{{ service.popup_name }}">Voir sur la carte</button>
+    <hr>
+</div>
+{% empty %}
+    <div class="col-lg-12">
+      <p>Aucun service disponible.</p>
+    </div>
+    {% endfor %}
+  </div>
+  <br>
+</div>
+
+
+
+  <!-- Bootstrap Modal -->
+  <div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="mapModalLabel">Location Map</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="modalMap" style="height: 400px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Bootstrap CSS and Bootstrap-select CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
+
+<!-- Add Bootstrap JS and Bootstrap-select JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
+
+<!-- ... Votre code HTML ... -->
+<script>
+
+
+    function searchServices() {
+        const gouvernorat = document.getElementById('gouvernorat').value;
+        const localite = document.getElementById('ville').value;
+        const type_pdv = document.getElementById('pdv').value;
+    
+        const searchUrl = `/search/?gouvernorat=${gouvernorat}&localite=${localite}&pdv=${type_pdv}`;
+    
+        window.location.href = searchUrl;
+    }
+    function redirectToMap(service) {
+      window.location.href = `/display_map/?goto=${service}`;
+  }
+
+  const locationButtons = document.querySelectorAll(".location-button");
+  locationButtons.forEach(button => {
+      button.addEventListener("click", function() {
+          const service = this.parentElement.getAttribute("data-service");
+          redirectToMap(service);
+      });
+  });
+  
+  $(document).ready(function() {
+    $(".location-button").click(function() {
+        var popupName = $(this).data("popup");
+        var mapUrl = "{% url 'display_map' %}?goto=" + encodeURIComponent(popupName);
+        window.location.href = mapUrl;
+    });
+  });
+
+
+</script>
+<style>
+  /* Custom class for black circle */
+  .text-black {
+    color: black;
+  }
+</style>
+
+<br><br>
+       <!-- About-->
+       <section class="page-section" id="about">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase wow flipOutX "data-wow-duration="2s">About</h2>
+                
+            </div>
+            <ul class="timeline">
+                <li>
+                    <div class="timeline-image wow rotateOutDownLeft"><img class="rounded-circle img-fluid" src="{% static 'assets/img/about/1.jpg' %}" alt="..." /></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h4>2009-2011</h4>
+                            <h4 class="subheading">Our Humble Beginnings</h4>
+                        </div>
+                        <div class="timeline-body"><p class="text-muted">Globalnet 2009-2011 est une entreprise de technologie qui a été fondée en 2009 avec des origines modestes. Elle a commencé comme une petite start-up avec seulement quelques employés et a travaillé dur pour se développer et devenir une entreprise prospère.</p></div>
+                    </div>
+                </li>
+                <li class="timeline-inverted">
+                    <div class="timeline-image wow rotateOutDownRight"><img class="rounded-circle img-fluid" src="{% static 'assets/img/about/2.jpg' %}" alt="..." /></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h4>March 2011</h4>
+                            <h4 class="subheading">An Agency is Born</h4>
+                        </div>
+                        <div class="timeline-body"><p class="text-muted">Globalnet March 2011 An Agency is Born est un livre qui raconte l'histoire de la création d'une agence de communication numérique appelée Globalnet.</p></div>
+                    </div>
+                </li>
+                <li>
+                    <div class="timeline-image wow rotateOutDownLeft"><img class="rounded-circle img-fluid" src="{% static 'assets/img/about/3.jpg' %}" alt="..." /></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h4>December 2015</h4>
+                            <h4 class="subheading">Transition to Full Service</h4>
+                        </div>
+                        <div class="timeline-body"><p class="text-muted">La transition de Globalnet en décembre 2015 vers un service complet signifie que l'entreprise a étendu ses services pour offrir une gamme complète de solutions de connectivité Internet et de télécommunications.</p></div>
+                    </div>
+                </li>
+                <li class="timeline-inverted">
+                    <div class="timeline-image wow rotateOutDownRight"><img class="rounded-circle img-fluid" src="{% static 'assets/img/about/4.jpg' %}" alt="..." /></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h4>July 2021</h4>
+                            <h4 class="subheading">Phase Two Expansion</h4>
+                        </div>
+                        <div class="timeline-body"><p class="text-muted">L'expansion de la phase deux de Globalnet comprendra l'ajout de nouveaux serveurs, la mise à niveau des équipements existants et l'extension de la couverture réseau dans plusieurs régions.</p></div>
+                    </div>
+                </li>
+              
+                <li class="timeline-inverted ">
+                    <div class="timeline-image wow rotateOutDownLeft">
+                        <h4>
+                            Be Part
+                            <br />
+                            Of Our
+                            <br />
+                            Story!
+                        </h4>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+   
+    <!-- Clients-->
+    <div class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-3 col-sm-6 my-3">
+                    <a href="https://www.microsoft.com/fr-tn"><img class="img-fluid img-brand d-block mx-auto" src="{% static 'assets/img/logos/microsoft.svg' %}" alt="..." aria-label="Microsoft Logo" /></a>
+                </div>
+                <div class="col-md-3 col-sm-6 my-3">
+                    <a href="https://www.google.com/webhp?hl=fr&sa=X&ved=0ahUKEwiThrqw47mAAxUXgv0HHayOA54QPAgI"><img class="img-fluid img-brand d-block mx-auto" src="{% static 'assets/img/logos/google.svg' %}" alt="..." aria-label="Google Logo" /></a>
+                </div>
+                <div class="col-md-3 col-sm-6 my-3">
+                    <a href="https://www.facebook.com/"><img class="img-fluid img-brand d-block mx-auto" src="{% static 'assets/img/logos/facebook.svg' %}" alt="..." aria-label="Facebook Logo" /></a>
+                </div>
+                <div class="col-md-3 col-sm-6 my-3">
+                    <a href="https://www.ibm.com/fr-fr"><img class="img-fluid img-brand d-block mx-auto" src="{% static 'assets/img/logos/ibm.svg' %}" alt="..." aria-label="IBM Logo" /></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact-->
+    <section class="page-section" id="contact">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-heading text-uppercase wow flipOutX">Contact Us</h2>
+                <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+            </div>
+            <!-- * * * * * * * * * * * * * * *-->
+            <!-- * * SB Forms Contact Form * *-->
+            <!-- * * * * * * * * * * * * * * *-->
+            <!-- This form is pre-integrated with SB Forms.-->
+            <!-- To make this form functional, sign up at-->
+            <!-- https://startbootstrap.com/solution/contact-forms-->
+            <!-- to get an API token!-->
+            <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                <div class="row align-items-stretch mb-5">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- Name input-->
+                            <input class="form-control" id="name" type="text" placeholder="Your Name *" data-sb-validations="required" />
+                            <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                        </div>
+                        <div class="form-group">
+                            <!-- Email address input-->
+                            <input class="form-control" id="email" type="email" placeholder="Your Email *" data-sb-validations="required,email" />
+                            <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
+                            <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
+                        </div>
+                        <div class="form-group mb-md-0">
+                            <!-- Phone number input-->
+                            <input class="form-control" id="phone" type="tel" placeholder="Your Phone *" data-sb-validations="required" />
+                            <div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-textarea mb-md-0">
+                            <!-- Message input-->
+                            <textarea class="form-control" id="message" placeholder="Your Message *" data-sb-validations="required"></textarea>
+                            <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Submit success message-->
+                <!---->
+                <!-- This is what your users will see when the form-->
+                <!-- has successfully submitted-->
+                <div class="d-none" id="submitSuccessMessage">
+                    <div class="text-center text-white mb-3">
+                        <div class="fw-bolder">Form submission successful!</div>
+                        To activate this form, sign up at
+                        <br />
+                        <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                    </div>
+                </div>
+                <!-- Submit error message-->
+                <!---->
+                <!-- This is what your users will see when there is-->
+                <!-- an error submitting the form-->
+                <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                <!-- Submit Button-->
+                <div class="text-center"><button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">Send Message</button></div>
+            </form>
+        </div>
+    </section>
+     <!-- Footer-->
+<footer class="footer py-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-4 text-lg-start">Copyright &copy; globalnet 2023</div>
+            <div class="col-lg-4 my-3 my-lg-0">
+                <a class="btn btn-dark btn-social mx-2" href="https://twitter.com/globalnetcomtr" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a class="btn btn-dark btn-social mx-2" href="https://www.facebook.com/GlobalNet/?locale=fr_FR" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a class="btn btn-dark btn-social mx-2" href="https://www.linkedin.com/company/globalnet-tunisie/?originalSubdomain=tn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+           
+        </div>
+    </div>
+</footer>
+<script src="{% static 'dist/js/wow.min.js' %}"></script>
+<script>
+new WOW().init();
+</script>
+
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+    <!-- * *                               SB Forms JS                               * *-->
+    <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+</body>
+</html>
+

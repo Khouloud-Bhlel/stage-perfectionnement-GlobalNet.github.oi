@@ -1,0 +1,27 @@
+<!-- service_location.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Service Location</title>
+</head>
+<body>
+    <h1>{{ service.titre }}</h1>
+    <p>Address: {{ service.address }}</p>
+    <p>Telephone: {{ service.telephone }}</p>
+    <p>Hours: {{ service.hours }}</p>
+    
+    {% if map %}
+        {{ map | safe }}  <!-- Use safe filter to render HTML content -->
+    {% else %}
+        <p>{{ error_message }}</p>
+    {% endif %}
+</body>
+</html>
+
+
+{% endblock content %}
+{% endblock body %}

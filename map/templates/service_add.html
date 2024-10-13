@@ -1,0 +1,524 @@
+
+{% load static %}
+
+<style>
+    .containerr {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+      
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+      
+    .form-group {
+        margin-bottom: 20px;
+    }
+      
+    label {
+        font-weight: bold;
+    }
+      
+    .btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+        background-color: #ec623c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+      
+    .btn:hover {
+        background-color: #e04e27;
+    }
+      
+    .custom-border {
+        border: 1px solid orange;
+    }
+      
+    .custom-color {
+        color: #0b0b0b;
+    }
+      
+    .custom-color label {
+        font-weight: bold;
+    }
+      
+    .custom-color .btn {
+        background-color: #ec623c;
+    }
+      
+    .custom-color .btn:hover {
+        background-color: #e04e27;
+    }
+      
+    .error-box {
+        color: red;
+        margin-top: 5px;
+    }
+      
+    .error-input input {
+        border: 2px solid red;
+    }
+    /* Add touch-action property */
+    .custom-color .btn, .custom-color .btn:hover {
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+    }
+</style>
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Commendes Tables</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+ 
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link">Contact</a>
+      </li>
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Navbar Search -->
+      <li class="nav-item">
+        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+          <i class="fas fa-search"></i>
+        </a>
+        <div class="navbar-search-block">
+          <form class="form-inline">
+            <div class="input-group input-group-sm">
+              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+              <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                  <i class="fas fa-search"></i>
+                </button>
+                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </li>
+
+      <!-- Messages Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-comments"></i>
+          <span class="badge badge-danger navbar-badge">3</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="{% static 'dist/img/user1-128x128.jpg' %}"  alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Brad Diesel
+                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">Call me whenever you can...</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="{% static 'dist/img/user8-128x128.jpg' %}"  alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  John Pierce
+                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">I got your message bro</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="{% static 'dist/img/user3-128x128.jpg' %}"  alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Nora Silvester
+                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">The subject goes here</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+        </div>
+      </li>
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge">15</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-item dropdown-header">15 Notifications</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 4 new messages
+            <span class="float-right text-muted text-sm">3 mins</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-users mr-2"></i> 8 friend requests
+            <span class="float-right text-muted text-sm">12 hours</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-file mr-2"></i> 3 new reports
+            <span class="float-right text-muted text-sm">2 days</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
+          <i class="fas fa-th-large"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+      <img src="{% static 'dist/img/AdminLTELogo.png' %}"  alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">Admin</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="{% static 'dist/img/user2-160x160.jpg' %}"  class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">admin</a>
+        </div>
+      </div>
+
+      <!-- SidebarSearch Form -->
+      <div class="form-inline">
+        <div class="input-group" data-widget="sidebar-search">
+          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+          <div class="input-group-append">
+            <button class="btn btn-sidebar">
+              <i class="fas fa-search fa-fw"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item ">
+            <a href="/administrator" class="nav-link ">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Dashboard
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            
+          </li>
+          <li class="nav-item menu-open">
+            <a  class="nav-link ">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Tables
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/simple" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p> Commendes Tables</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/data" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Services</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Tables</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active"> Tables</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <div class="containerr">
+      <h2>Ajouter un service</h2>
+      <div class="custom-border shadow p-3 mb-5 bg-white rounded" style="border: 1px solid orange;">
+          <form class="form" method="post" id="service-form">
+              {% csrf_token %}
+                      <input type="hidden" name="csrfmiddlewaretoken" value="8QNanPwKw9RVQgLGrzwm2zwrNz35bWSxTrEcMjluOM73cTsSW09EqyFH623xi6N4">
+                      <div class="form-group custom-color ">
+                          <label for="id_titre">Titre :</label>
+                          <input type="text" name="titre" class="form-control" maxlength="100" id="id_titre">
+                          <div class="error-box" id="titre-error">
+                              
+                          </div>
+                      </div>
+                      <div class="form-group custom-color ">
+                          <label for="id_address">Adresse :</label>
+                          <input type="text" name="address" class="form-control" maxlength="200"  id="id_address">
+                          <div class="error-box" id="address-error">
+                              
+                          </div>
+                      </div>
+                      <div class="form-group custom-color ">
+                          <label for="id_telephone">Téléphone :</label>
+                          <input type="text" name="telephone" class="form-control" maxlength="20"  id="id_telephone">
+                          <div class="error-box" id="telephone-error">
+                              
+                          </div>
+                      </div>
+                      <div class="form-group custom-color ">
+                          <label for="id_hours">Horaires :</label>
+                          <input type="text" name="hours" class="form-control" maxlength="100" id="id_hours">
+                          <div class="error-box" id="hours-error">
+                              
+                          </div>
+                      </div>
+                      <div class="form-group custom-color ">
+                          <label for="id_gouvernorat">Gouvernorat :</label>
+                          <select name="gouvernorat" class="form-control" id="id_gouvernorat">
+                                <option value="Gouvernorat">Gouvernorat</option>
+                              
+                                <option value="ARIANA">ARIANA</option>
+                              
+                                <option value="BEJA">BEJA</option>
+                              
+                                <option value="BEN AROUS">BEN AROUS</option>
+                              
+                                <option value="BIZERTE">BIZERTE</option>
+                              
+                                <option value="GABES">GABES</option>
+                              
+                                <option value="GAFSA">GAFSA</option>
+                              
+                                <option value="JENDOUBA">JENDOUBA</option>
+                              
+                                <option value="KAIROUAN">KAIROUAN</option>
+                              
+                                <option value="KASSERINE">KASSERINE</option>
+                              
+                                <option value="KEBILI">KEBILI</option>
+                              
+                                <option value="KEF">KEF</option>
+                              
+                                <option value="MAHDIA">MAHDIA</option>
+                              
+                                <option value="MANOUBA">MANOUBA</option>
+                              
+                                <option value="MEDENINE">MEDENINE</option>
+                              
+                                <option value="MONASTIR">MONASTIR</option>
+                              
+                                <option value="NABEUL">NABEUL</option>
+                              
+                                <option value="SFAX">SFAX</option>
+                              
+                                <option value="SIDI BOUZID">SIDI BOUZID</option>
+                              
+                                <option value="SILIANA">SILIANA</option>
+                              
+                                <option value="SOUSSE">SOUSSE</option>
+                              
+                                <option value="TATAOUINE">TATAOUINE</option>
+                              
+                                <option value="TOZEUR">TOZEUR</option>
+                              
+                                <option value="TUNIS">TUNIS</option>
+                              
+                                <option value="ZAGHOUAN">ZAGHOUAN</option>
+                              
+                              </select>
+                          <div class="error-box">
+                              
+                          </div>
+                      </div>
+                      <div class="form-group custom-color ">
+                          <label for="id_localite">Localité :</label>
+                          <select name="localite" class="form-control" id="id_localite">
+                                        <option value="Localité">Localité</option>
+                                      
+                                        <option value="ARIANA">ARIANA</option>
+                                      
+                                        <option value="BORJ LOUZIR">BORJ LOUZIR</option>
+                                      
+                                        <option value="CITE ETTADAMAN">CITE ETTADAMAN</option>
+                                      
+                                        <option value="EL MENZAH 6">EL MENZAH 6</option>
+                                      
+                                        <option value="ENNASR">ENNASR</option>
+                                      
+                                        <option value="NKHILET">NKHILET</option>
+                            </select>
+                          <div class="error-box">
+                              
+                          </div>
+                      </div>
+                      <div class="form-group custom-color ">
+                          <label for="id_type">Type :</label>
+                          <select name="type" class="form-control" id="id_type">
+                                  <option value="Type">Type</option>
+                                
+                                  <option value="Agence">Agence</option>
+                                
+                                  <option value="Revendeur">Revendeur</option>
+                                
+                          </select>
+                          <div class="error-box">
+                              
+                          </div>
+                      </div>
+                      <div class="form-group custom-color ">
+                          <label for="id_popup_name">popup name :</label>
+                          <input type="text" name="popup_name" class="form-control" maxlength="100"  id="id_popup_name">
+                          <div class="error-box" id="pup-error">
+                              
+                          </div>
+                      </div>
+                      <button class="btn" type="submit">Ajouter</button>
+                      <br>
+                  </form>
+      </div>
+  </div>
+  <!-- Add this inside your <head> tag -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+      $(document).ready(function () {
+          // Validate the form before submission
+          $('#service-form').on('submit', function (event) {
+              // Prevent the default form submission
+              event.preventDefault();
+  
+              // Perform your custom validation here if needed
+              // Example: Check if the required fields are not empty
+              var formIsValid = true;
+  
+              if ($('#id_titre').val() === '') {
+                  formIsValid = false;
+                  $('#titre-error').text('Ce champ est obligatoire.');
+              } else {
+                  $('#titre-error').text('');
+              }
+  
+              if ($('#id_address').val() === '') {
+                  formIsValid = false;
+                  $('#address-error').text('Ce champ est obligatoire.');
+              } else {
+                  $('#id_address-error').text('');
+              }
+          
+          if ($('#id_telephone').val() === '') {
+            formIsValid = false;
+            $('#telephone-error').text('Ce champ est obligatoire.');
+          } else {
+            $('#telephone-error').text('');
+          }
+          
+          if ($('#id_hours').val() === '') {
+            formIsValid = false;
+            $('#hours-error').text('Ce champ est obligatoire.');
+          } else {
+            $('#hours-error').text('');
+          }
+          if ($('#id_popup_name').val() === '') {
+            formIsValid = false;
+            $('#pup-error').text('Ce champ est obligatoire.');
+          } else {
+            $('#pup-error').text('');
+          }
+          
+          // Add more validation checks for other fields if needed
+      
+          // If the form is valid, submit it
+          if (formIsValid) {
+            this.submit();
+          }
+        });
+      });
+  </script>
+  

@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{% static 'dragula/dragula.min.css' %}" rel="stylesheet">        
+    </head>
+    <body>
+        <div class="wrapper">
+            <div id="left" class="container">
+              <div>Item 1.</div>
+              <div>Item 2.</div>
+              <div>Item 3.</div>
+              <div>Item 4.</div>
+            </div>
+         
+          </div>
+          
+          <script>
+            // Assuming you have wrapped the dragula call inside a document.ready() function
+            document.addEventListener("DOMContentLoaded", function () {
+                // Enable drag-and-drop between the 'left' and 'right' containers
+                var containers = [document.querySelector('#left'), document.querySelector('#right')];
+                var drake = dragula(containers, {
+                    // Here you can pass the options object with the desired configuration (if needed)
+                    // Refer to the configuration options provided in the description you shared
+                });
+                
+                // Optionally, you can add event handlers to handle various drag-and-drop events
+                drake.on('drag', function (el, source) {
+                    // do something when dragging starts
+                });
+                
+                drake.on('drop', function (el, target, source, sibling) {
+                    // do something when an item is dropped
+                });
+                
+                // Add other event handlers as needed
+            });
+        </script>
+        
+          <script src="{% static 'dragula/dragula.min.js' %}"></script>
+    </body>
+</html>

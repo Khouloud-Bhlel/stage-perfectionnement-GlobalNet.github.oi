@@ -1,0 +1,873 @@
+{% extends 'base.html' %}
+{% load static %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="{% static 'dist/css/animate.css' %}">
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+{% block content %}
+<style>
+    /* Custom styles for the wizard */
+    .stepwizard {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+
+    .stepwizard-step {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 2px solid orange;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: orange;
+        font-weight: bold;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .stepwizard-step.active {
+        background-color: orange;
+        color: white;
+    }
+
+    .panel-title {
+        color: black;
+        text-shadow: 0 0 1rem orange;
+    }
+
+    .panel.setup-content {
+        display: none;
+        border: 1px solid orange;
+        margin-left: 100px;
+        margin-right: 100px;
+        padding: 30px;
+        background-color: #f9f9f9;
+    }
+
+    .panel.setup-content:first-child {
+        display: block;
+    }
+
+    .stepwizard-row {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .form-control {
+        border-radius: 20px;
+    }
+
+    .nextBtn {
+        background-color: orange;
+        color: white;
+    }
+
+    .nextBtn:hover {
+        background-color: #ff9100;
+    }
+    .wizard {
+        width: 100%;
+        max-width: 800px;
+        margin: auto;
+      }
+      
+      .wizard-header {
+        text-align: center;
+      }
+      
+      .wizard-steps {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .wizard-steps ul {
+        display: flex;
+      }
+      
+      .wizard-steps li {
+        list-style: none;
+      }
+      
+      .wizard-steps li a {
+        display: block;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+      }
+      
+      .wizard-steps li.active a {
+        background-color: #007bff;
+        color: #fff;
+      }
+      
+      .wizard-progress {
+        height: 5px;
+        background-color: #ccc;
+      }
+      
+      .wizard-progress .progress-bar {
+        height: 100%;
+        background-color: #007bff;
+      }
+      
+      .wizard-content {
+        margin-top: 30px;
+      }
+      
+      .wizard-step {
+        display: none;
+      }
+      
+      .wizard-step.active {
+        display: block;
+      }
+      
+      .wizard-footer {
+        margin-top: 30px;
+      }
+      
+      .wizard-footer button {
+        margin-right: 10px;
+      }
+        .progress {
+          height: 30px;
+          margin-bottom: 20px;
+          overflow: hidden;
+          background-color: #f5f5f5;
+          border-radius: 4px;
+        }
+      
+        .progress-bar {
+          text-align: center;
+          line-height: 30px;
+          color: white;
+          font-weight: bold;
+        }
+
+.stepwizard .progress {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.stepwizard .progress-bar {
+  height: 20px;
+}
+
+      </style>
+</head>
+<style>.step-btn:hover {
+    background-color: #ffc800;
+    color: white;
+}
+</style>
+<body>
+    <br>
+    <!-- Add this before your custom script -->
+    <div class="container border" style="box-shadow: 0 0 5px rgba(0, 0, 0, 1);">
+      <br>
+      <h1 class="text-center panel-title wow tada">...Commande en ligne...</h1>
+      <br><br>
+      <div class="stepwizard">
+          <div class="stepwizard-row setup-panel"><br>
+              <div class="stepwizard-step btn-circle btn-default btn-outline-warning step-btn active" onclick="showStep('step1')">1</div>
+              <div class="stepwizard-step btn-circle btn-default btn-outline-warning step-btn" onclick="showStep('step2')">2</div>
+              <div class="stepwizard-step btn-circle btn-default btn-outline-warning step-btn" onclick="showStep('step3')">3</div>
+              <div class="stepwizard-step btn-circle btn-default btn-outline-warning step-btn" onclick="showStep('step4')">4</div>
+          </div>
+      </div>
+  
+      <div class="progress">
+          <div class="progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; background-color: #f0ad4e;">
+          </div>
+      </div>
+
+  
+  <!-- Add your custom script -->
+  <script>
+  
+  
+      let currentStep = 1;
+      const totalSteps = 4;
+      
+      function updateProgressBar() {
+          const progress = Math.ceil((currentStep / totalSteps) * 100);
+          $(".progress-bar").css("width", progress + "%");
+          $(".progress-bar").attr("aria-valuenow", progress);
+      }
+      
+      function showStep(stepId) {
+          $(".panel.setup-content").hide();
+          $("#" + stepId).show();
+      
+          // Add the 'active' class to the clicked step button
+          $(".stepwizard-step").removeClass("active");
+          $(".stepwizard-step[data-step='" + stepId + "']").addClass("active");
+      
+          currentStep = parseInt(stepId.charAt(stepId.length - 1));
+          updateProgressBar();
+      }
+      
+      $(document).ready(function () {
+          // Call the function to initialize the wizard buttons
+          $(".step-btn").on("click", function () {
+              var stepId = $(this).data('step');
+              showStep(stepId);
+          });
+      
+          // Show the first step on page load
+          showStep("step1");
+      });
+      
+  </script>
+  
+  <script src="{% static 'dist/js/wow.min.js' %}"></script>
+  <script>
+  new WOW().init();
+  </script>
+    
+
+<div class="container">
+<form method="post" id="myForm" role="form">
+    {% csrf_token %}
+   <!-- ======= step1 ======= -->
+   <div class="panel panel-warning setup-content" id="step1" style="display: none; border: 1px solid orange; margin-left: 300px; margin-right: 300px;">
+    <div class="container" style="background-color: orange;">
+        <h3 class="panel-title ">Etes-vous déjà un client Gnet ?</h3>
+    </div>
+
+        <div class="panel-body" style="margin-left: 100px;">
+            <section>
+                <div class="radio form-group">
+                    <label class="control-label">
+                        <input type="radio" value="true" name="dejaClient" id="dejaClientOui" onclick="showDejaClientFields()"> Oui
+                    </label>
+                </div>
+                <div class="radio form-group">
+                    <label class="control-label">
+                        <input type="radio" value="false"  name="dejaClient" id="dejaClientNon"onclick="showDejaClientFields()"> Non
+                    </label>
+                </div>
+                
+        </section>
+        <button class="btn btn-warning nextBtn pull-right" type="button" onclick="showStep('step2')">Suivant</button>
+    </div>
+    </div>
+
+<!-- ======= step2 ======= -->
+<div class="panel panel-warning setup-content" id="step2" style="display: none; border: 1px solid orange; margin-left: 300px; margin-right: 300px;">
+  <div class="container" style="background-color: orange;">
+      <h3 class="panel-title ">Veuillez saisir vos coordonnées</h3>
+  </div>
+  <div class="panel-body" style="margin-left: 100px;">
+      <section>
+          <div id="dejaClientFields">
+              <div class="form-group col-sm-12">
+                  <label class="control-label">
+                      <input type="radio" value="codeClient" style="margin-right: 6px;" name="codeClientOrCin"> Code client
+                  </label>
+                  <input type="text" class="form-control" id="codeClientExistant" name="codeClientExistant" value="">
+              </div>
+              <div class="form-group col-sm-12">
+                  <label class="control-label">
+                      <input type="radio" value="cin" style="margin-right: 6px;" name="codeClientOrCin"> CIN
+                  </label>
+                  <input type="text" class="form-control" id="cinClientExistant" name="cinClientExistant" value="">
+              </div>
+              <div class="col-sm-12">
+                  <hr>
+              </div>
+          </div>
+      <div id="newClient" style="display: block;">
+          <div class="form-group col-sm-12">
+              <label class="control-label">Nom et prénom*</label>
+               <input type="text" class="form-control" id="nomClient" name="nomClient" value="" >
+               <span id="nomClientError" class="error" style="color: red;"></span>
+          </div>
+          <div class="form-group col-sm-3">
+              <label class="control-label">Type identifiant*</label>
+               <select class="form-control" id="typeIdentifiant" name="typeIdentifiant" >
+                  <option value="CIN">CIN</option>
+                  <option value="Carte Sejour">Carte Sejour</option>
+                  <option value="Passeport">Passeport</option>
+              </select>
+          </div>
+          <div class="form-group col-sm-3">
+              <label class="control-label">Identifiant*</label> <input type="text" class="form-control" id="identifiant" name="identifiant" value="" >
+              <span id="identifiantError" class="error" style="color: red;"></span>
+          </div>
+          <div class="form-group col-sm-6">
+              <label class="control-label">Email*</label> <input type="email" class="form-control" id="emailClient" name="emailClient" value="">
+              <span id="emailError" class="error"  style="color: red;"></span>
+          </div>
+      </div>
+      <div class="form-group col-sm-6">
+          <label class="control-label">Gouvernorat*</label> <select class="form-control" id="gouvernorat" name="gouvernorat">
+              <option value=""></option>
+              <option value="ARIANA">ARIANA</option>
+              <option value="BEJA">BEJA</option>
+              <option value="BEN AROUS">BEN AROUS</option>
+              <option value="BIZERTE">BIZERTE</option>
+              <option value="GABES">GABES</option>
+              <option value="GAFSA">GAFSA</option>
+              <option value="JENDOUBA">JENDOUBA</option>
+              <option value="KAIROUAN">KAIROUAN</option>
+              <option value="KASSERINE">KASSERINE</option>
+              <option value="KEBILI">KEBILI</option>
+              <option value="LA MANOUBA">LA MANOUBA</option>
+              <option value="LE KEF">LE KEF</option>
+              <option value="MAHDIA">MAHDIA</option>
+              <option value="MEDENINE">MEDENINE</option>
+              <option value="MONASTIR">MONASTIR</option>
+              <option value="NABEUL">NABEUL</option>
+              <option value="SFAX">SFAX</option>
+              <option value="SIDI BOUZID">SIDI BOUZID</option>
+              <option value="SILIANA">SILIANA</option>
+              <option value="SOUSSE">SOUSSE</option>
+              <option value="TATAOUINE">TATAOUINE</option>
+              <option value="TOZEUR">TOZEUR</option>
+              <option value="TUNIS">TUNIS</option>
+              <option value="ZAGHOUAN">ZAGHOUAN</option>
+          </select>
+      </div>
+      <div class="form-group col-sm-12">
+          <label class="control-label">Adresse*</label> <input type="text" class="form-control" id="adresse" name="adresse" value="">
+      </div>
+      <div class="form-group col-sm-6">
+          <label class="control-label">Code postal*</label> <input type="text"  class="form-control" id="codePostal" name="codePostal" value="">
+          <span id="codePostalError" class="error"  style="color: red;"></span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label">N° Téléphone Mobile*</label>
+        <br>
+        <div class="iti">
+            <div class="iti__flag-container">
+                <div class="iti__selected-flag" role="combobox" aria-owns="country-listbox" title="Tunisia (‫تونس‬‎): +216">
+                    <div class="iti__flag iti__tn"></div>
+                </div>
+            </div>
+            <input type="tel" id="gsmClient" class="form-control" placeholder="98 000 000" name="gsmClient" value="" autocomplete="off" data-intl-tel-input-id="0" data-mask="00 000 000" data-mask-reverse="true" onchange="validatePhoneNumber()">
+        </div>
+        <span id="gsmClientError" class="error" style="color: red;"></span>
+        <span id="valid-msg-numero-appel" class="error1" style="color: green;"></span>
+        <span id="error-msg-numero-appel" class="error2" style="color: red;"></span>
+    </div>
+      
+      <input type="hidden" id="lat" name="lat" value=""> <input type="hidden" id="lon" name="lon" value="">
+  </section>
+      <div class="col-sm-12 " style="margin-top: 22px;">
+          <button class="btn btn-warning nextBtn pull-right" type="button" onclick="validateStep2();">Suivant</button>
+      </div>
+  </div>
+
+</div>
+
+<!-- ======= step3 ======= -->
+<div class="panel panel-warning setup-content" id="step3" style="display: none;border: 1px solid orange; margin-left: 300px; margin-right: 300px;">
+  <div class="container" style="background-color: orange;">
+      <h3 class="panel-title">veuillez sélectionner votre offre</h3>
+  </div>
+  <div class="panel-body" style="margin-left: 100px;">
+  <section>
+      <div class="form-group col-sm-6">
+          <label class="control-label">Nom du propriétaire de la ligne*</label>
+          <input type="text"  class="form-control" id="nomProprietaireLigne" name="nomProprietaireLigne" value="">
+          <span id="nomProprietaireLigneError" class="error2" style="color:red;"></span>
+          <span id="nomProprietaireLigneValide" class="error1" style="color: green;"></span>
+
+      </div>
+      <div class="form-group col-sm-6">
+        <label class="control-label">N° Téléphone ADSL</label><br>
+        <div class="iti">
+            <div class="iti__flag-container">
+                <div class="iti__selected-flag" role="combobox" aria-owns="country-listbox" title="Tunisia (‫تونس‬‎): +216">
+                    <div class="iti__flag iti__tn"></div>
+                </div>
+            </div>
+            <input type="tel" id="numeroAppel" class="form-control" placeholder="71 132 132" name="numeroAppel" value="" autocomplete="off" data-intl-tel-input-id="1" onchange="validatePhoneNumberAdsl()">
+        </div>
+    </div>
+    <div class="form-group col-sm-6">
+        <div class="form-group col-sm-6">
+            <span id="valid-msg-numero-appel-adsl" class="error1" style="color: green;"></span>
+            <span id="error-msg-numero-appel-adsl" class="error2" style="color: red;"></span>
+        </div>
+    </div>
+<script>
+  function validatePhoneNumberAdsl() {
+    const phoneNumberInput = document.getElementById("numeroAppel");
+    const phoneNumber = phoneNumberInput.value.trim();
+
+    const tunisieTelecomPrefix = ["99", "98", "97", "96", "95", "94", "93", "92"];
+    const ooredooTnPrefix = ["22", "21", "20", "23", "24", "25", "26", "27", "65"];
+    const orangeTunisiePrefix = ["58", "55", "53", "52", "50"];
+
+    const isValidPrefix =
+        phoneNumber.length === 8 &&
+        (tunisieTelecomPrefix.includes(phoneNumber.substr(0, 2)) ||
+        ooredooTnPrefix.includes(phoneNumber.substr(0, 2)) ||
+        orangeTunisiePrefix.includes(phoneNumber.substr(0, 2)));
+
+    if (phoneNumber.trim() === "") {
+        phoneNumberInput.style.borderColor = "red";
+        document.getElementById("valid-msg-numero-appel-adsl").textContent = "";
+        document.getElementById("error-msg-numero-appel-adsl").textContent = "Veuillez remplir le champ du numéro de téléphone ADSL.";
+    } else if (phoneNumber.length !== 8 || isNaN(phoneNumber)) {
+        phoneNumberInput.style.borderColor = "red";
+        document.getElementById("valid-msg-numero-appel-adsl").textContent = "";
+        document.getElementById("error-msg-numero-appel-adsl").textContent = "Le numéro de téléphone ADSL doit contenir 8 chiffres.";
+    } else if (!isValidPrefix) {
+        phoneNumberInput.style.borderColor = "red";
+        document.getElementById("valid-msg-numero-appel-adsl").textContent = "";
+        document.getElementById("error-msg-numero-appel-adsl").textContent = "Erreur";
+    } else {
+        phoneNumberInput.style.borderColor = "green";
+        document.getElementById("valid-msg-numero-appel-adsl").textContent = "Valide";
+        document.getElementById("error-msg-numero-appel-adsl").textContent = "";
+    }
+}
+
+
+
+</script>    
+      
+      <div class="form-group col-sm-6">
+          <label class="control-label">Produit*</label> 
+          <select class="form-control" id="produit"  name="produit">
+              <option value="UNO VDSL 20M" {% if selected_produit == 'UNO VDSL 20M' %}selected{% endif %}>UNO VDSL 20M</option>
+              <option value="UNO VDSL 30M" {% if selected_produit == 'UNO VDSL 30M' %}selected{% endif %}>UNO VDSL 30M</option>
+              <option value="UNO VDSL 50M" {% if selected_produit == 'UNO VDSL 50M' %}selected{% endif %}>UNO VDSL 50M</option>
+              <option value="UNO VDSL 100M" {% if selected_produit == 'UNO VDSL 100M' %}selected{% endif %}>UNO VDSL 100M</option>
+          </select>
+      </div>
+      <input type="hidden" name="produitMappedId" id="produitMappedId" value="NUNO VL 20M">
+     
+      <div class="form-group col-sm-6">
+          <label class="control-label">Paiement*</label> 
+          <select class="form-control"  id="paiement" name="paiement">
+            <option value="Mensuel" prix="37.900">Mensuel</option>
+            <option value="Trimestriel" prix="113.700">Trimestriel</option>
+            <option value="Semestriel" prix="227.400">Semestriel</option>
+            <option value="Annuel" prix="454.800">Annuel</option>
+          </select>
+        </div>
+        
+        <div class="form-group row">
+          <div class="col-sm-6 col-sm-offset-3">
+            <label class="control-label" style="margin-top: 30px;"> 
+              Prix : 
+              <span id="price">37.900 dt</span>
+              <i class="fraisInstallation"> +40.900 dt frais d'installation</i>
+              <span id="descriptif"></span>
+            </label>
+            <br> <label class="promoLabel" style="font-weight: normal;" promo-id="RepeaterWifiOneDinar"> 
+              <input type="checkbox" class="promoCheckbox" value="RepeaterWifiOneDinar" id="RepeaterWifiOneDinar" prix-par-mois="1"> + 1dt/mois répéteur wifi
+            </label>
+            <!--  -->
+            <input type="hidden" class="form-control" id="promos" name="promos" value=""> 
+            <!--  -->
+            <hr style="margin-top: 10px; margin-bottom: 10px; border-top: 1px solid #cecece;">
+            <b>Total à payer : </b> <span id="total">37.900 dt</span>
+            <!--  -->
+            <br> <i style="line-height: 1.42857143; color: #777; margin-top: 10px;">Paiement à la récupération du modem</i>
+          </div>
+        </div>
+  </section>
+      <button class="btn btn-warning nextBtn pull-right" type="button" onclick="validateStep3();">Suivant</button>
+  </div>
+</div>
+<!-- ======= step4 ======= -->
+<div class="panel panel-warning setup-content" id="step4" style="display: none;border: 1px solid orange; margin-left: 300px; margin-right: 300px;">
+<div class="container" style="background-color: orange;">
+<h3 class="panel-title">Comment voulez-vous récupérer votre modem ?</h3>
+</div>
+<div class="panel-body" style="margin-left: 100px;">
+  <section>
+<div class="form-group col-sm-6">
+  <label class="control-label">Récupérer le modem*</label>
+  <div class="radio">
+    <label>
+      <input type="radio" value="Livraison à domicile" id="recupererModem1" name="recupererModem"> Livraison à domicile
+    </label>
+  </div>
+  <div class="radio">
+    <label>
+      <input type="radio"  value="Récupérer d’une agence GlobalNet" id="recupererModem2" name="recupererModem"> Récupérer d’une agence GlobalNet
+    </label>
+  </div>
+</div>
+<div class="form-group col-sm-6">
+  <label class="control-label">Agences GlobalNet</label>
+  <select class="form-control" disabled="disabled" id="agence" name="agence">
+    <option value="Agence Ariana">Agence Ariana</option>
+    <option value="Agence Av. de la République">Agence Av. de la République</option>
+    <option value="Agence El Menzah">Agence El Menzah</option>
+    <option value="Agence Ennasr">Agence Ennasr</option>
+    <option value="Agence Kheireddine Pacha">Agence Kheireddine Pacha</option>
+    <option value="Agence Lac 1">Agence Lac 1</option>
+    <option value="Agence Lac 2">Agence Lac 2</option>
+    <option value="Agence Nabeul">Agence Nabeul</option>
+    <option value="Agence Sousse">Agence Sousse</option>
+    <option value="Agence Tunis Belvédère">Agence Tunis Belvédère</option>
+    <option value="Agence Tunis Centre Ville">Agence Tunis Centre Ville</option>
+    <option value="Agence Tunis El Menzah 9">Agence Tunis El Menzah 9</option>
+    <option value="Agence Tunis Lafayette">Agence Tunis Lafayette</option>
+    <option value="Agence Tunis Lac">Agence Tunis Lac</option>
+    <option value="Agence Tunis Le Kram">Agence Tunis Le Kram</option>
+    <option value="Agence Tunis Les Berges du Lac">Agence Tunis Les Berges du Lac</option>
+    <option value="Agence Tunis Médina">Agence Tunis Médina</option>
+    <option value="Agence Tunis Montplaisir">Agence Tunis Montplaisir</option>
+    <option value="Agence Tunis Mutuelle Ville">Agence Tunis Mutuelle Ville</option>
+    <option value="Agence Tunis Route de la Marsa">Agence Tunis Route de la Marsa</option>
+    <option value="Agence Tunis Zone Industrielle">Agence Tunis Zone Industrielle</option>
+  </select>
+</div>
+{{ form.captcha.errors }}
+  {{ form.captcha.label_tag }}
+  {{ form.captcha }}
+  <br>
+</section>
+<div class="col-sm-12">
+  <button class="btn btn-warning pull-right" type="submit">Valider</button>
+</div>
+</div>
+</div>
+</div>
+
+<br>
+
+  
+</form>
+</div>
+<br>
+</div>
+<script>    
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var radioLivraison = document.getElementById("recupererModem1");
+    var radioAgence = document.getElementById("recupererModem2");
+    var selectAgence = document.getElementById("agence");
+
+    function toggleAgenceSelection() {
+      if (radioAgence.checked) {
+        selectAgence.disabled = false;
+      } else {
+        selectAgence.disabled = true;
+      }
+    }
+
+    radioLivraison.addEventListener("change", toggleAgenceSelection);
+    radioAgence.addEventListener("change", toggleAgenceSelection);
+  });
+
+    function calculateTotal() {
+        const selectedPaiementOption = document.getElementById("paiement");
+        const price = parseFloat(selectedPaiementOption.options[selectedPaiementOption.selectedIndex].getAttribute("prix"));
+        const fraisInstallation = 40.900; // Fixed installation fee
+    
+        const repeaterCheckbox = document.getElementById("RepeaterWifiOneDinar");
+        const promoPricePerMonth = 1; // 1 dt per month for the "répéteur wifi" promo checkbox
+        const selectedPromos = document.getElementById("promos").value.split(",").filter(Boolean); // Convert selected promos to an array
+    
+        let total = price + fraisInstallation;
+    
+        if (selectedPromos.includes(repeaterCheckbox.value)) {
+          total += promoPricePerMonth;
+        }
+    
+        document.getElementById("price").innerText = price.toFixed(3) + " dt";
+        document.getElementById("total").innerText = total.toFixed(3) + " dt";
+      }
+    
+      // Call calculateTotal() initially when the page loads
+      calculateTotal();
+    
+      // Attach event listeners to update the total whenever the payment option or promo checkbox changes
+      document.getElementById("paiement").addEventListener("change", calculateTotal);
+      document.getElementById("RepeaterWifiOneDinar").addEventListener("change", function () {
+        const repeaterCheckbox = document.getElementById("RepeaterWifiOneDinar");
+        const totalElement = document.getElementById("total");
+        const currentTotal = parseFloat(totalElement.innerText);
+    
+        if (repeaterCheckbox.checked) {
+          // If the checkbox is checked, add 1 dt to the Total à payer
+          totalElement.innerText = (currentTotal + 1).toFixed(3) + " dt";
+        } else {
+          // If the checkbox is unchecked, subtract 1 dt from the Total à payer
+          totalElement.innerText = (currentTotal - 1).toFixed(3) + " dt";
+        }
+      });
+    
+      $(document).ready(function () {
+        // Function to show or hide the input fields based on the user's selection
+        function toggleClientFields() {
+          if ($("#dejaClientOui").prop("checked")) {
+            $("#dejaClientFields").show();
+            $("#newClientFields").hide();
+          } else if ($("#dejaClientNon").prop("checked")) {
+            $("#dejaClientFields").hide();
+            $("#newClientFields").show();
+          }
+        }
+    
+        // Call the function on page load to set the initial state
+        toggleClientFields();
+    
+        // Bind the function to the change event of the radio buttons
+        $("input[name='dejaClient']").change(function () {
+          toggleClientFields();
+        });
+      });
+        
+
+
+
+  
+    function showDejaClientFields() {
+        var dejaClientOui = document.getElementById("dejaClientOui");
+        var dejaClientFields = document.getElementById("dejaClientFields");
+        if (dejaClientOui.checked) {
+            dejaClientFields.style.display = "block";
+        } else {
+            dejaClientFields.style.display = "none";
+        }
+    }
+    
+ 
+
+  
+    $("#example-basic").steps({
+      headerTag: "h1",
+      bodyTag: "section",
+      transitionEffect: "slideLeft",
+      autoFocus: true
+    });
+        function validatePhoneNumber() {
+            const phoneNumberInput = document.getElementById("gsmClient");
+            const phoneNumber = phoneNumberInput.value.trim();
+    
+            const tunisieTelecomPrefix = ["99", "98", "97", "96", "95", "94", "93", "92"];
+            const ooredooTnPrefix = ["22", "21", "20", "23", "24", "25", "26", "27", "65"];
+            const orangeTunisiePrefix = ["58", "55", "53", "52", "50"];
+    
+            const isValidPrefix =
+                phoneNumber.length === 8 &&
+                (tunisieTelecomPrefix.includes(phoneNumber.substr(0, 2)) ||
+                    ooredooTnPrefix.includes(phoneNumber.substr(0, 2)) ||
+                    orangeTunisiePrefix.includes(phoneNumber.substr(0, 2)));
+    
+            if (isValidPrefix) {
+                phoneNumberInput.style.borderColor = "green";
+                document.getElementById("valid-msg-numero-appel").textContent = "Valide";
+                document.getElementById("error-msg-numero-appel").textContent = "";
+            } else {
+                phoneNumberInput.style.borderColor = "red";
+                document.getElementById("valid-msg-numero-appel").textContent = "";
+                document.getElementById("error-msg-numero-appel").textContent = "Erreur";
+            }
+            if (numeroAppel.trim() === "") {
+                isValid = false;
+                numeroAppel.style.borderColor = "red";
+                document.getElementById("valid-msg-numero-appel").classList.add("error1");
+                document.getElementById("error-msg-numero-appel").classList.remove("error2");
+                document.getElementById("error-msg-numero-appel").textContent = "Veuillez remplir le champ du numéro de téléphone ADSL.";
+              } else if (numeroAppel.length !== 8 || isNaN(numeroAppel)) {
+                isValid = false;
+                numeroAppel.style.borderColor = "red";
+                document.getElementById("valid-msg-numero-appel").classList.add("error1");
+                document.getElementById("error-msg-numero-appel").classList.remove("error2");
+                document.getElementById("error-msg-numero-appel").textContent = "Le numéro de téléphone ADSL doit contenir 8 chiffres.";
+              } else {
+                document.getElementById("valid-msg-numero-appel").classList.remove("error1");
+                document.getElementById("error-msg-numero-appel").classList.remove("error2");
+                document.getElementById("valid-msg-numero-appel").textContent = "✓ Valide";
+              }
+        }
+    
+  
+    function validateStep2() {
+      var nomClient = $('#nomClient').val();
+      var identifiant = $('#identifiant').val();
+      var emailClient = $('#emailClient').val();
+      var gouvernorat = $('#gouvernorat').val();
+      var adresse = $('#adresse').val();
+      var codePostal = $('#codePostal').val();
+      var gsmClient = $('#gsmClient').val();
+      
+      var isValid = true;
+  
+      if (nomClient.trim() === '') {
+        document.getElementById("nomClient").style.borderColor = "red";
+        $('#nomClientError').text('Ce champ est obligatoire.');
+        
+        isValid = false;
+      } else {
+        
+        $('#nomClientError').text('');
+        document.getElementById("nomClient").style.borderColor = "green";
+      }
+  
+      if (identifiant.trim() === '') {
+        document.getElementById("identifiant").style.borderColor = "red";
+        $('#identifiantError').text('Ce champ est obligatoire.');
+        isValid = false;
+      } else {
+        $('#identifiantError').text('');
+        document.getElementById("identifiant").style.borderColor = "green";
+      }
+  
+      if (emailClient.trim() === '') {
+        document.getElementById("emailClient").style.borderColor = "red";
+        $('#emailError').text('Ce champ est obligatoire.');
+        isValid = false;
+      } else {
+        $('#emailError').text('');
+        document.getElementById("emailClient").style.borderColor = "green";
+      }
+  
+      if (gouvernorat.trim() === '') {
+        document.getElementById("gouvernorat").style.borderColor = "red";
+        $('#gouvernoratError').text('Ce champ est obligatoire.');
+        isValid = false;
+      } else {
+        $('#gouvernoratError').text('');
+        document.getElementById("gouvernorat").style.borderColor = "green";
+      }
+  
+      if (adresse.trim() === '') {
+        document.getElementById("adresse").style.borderColor = "red";
+        $('#adresseError').text('Ce champ est obligatoire.');
+        isValid = false;
+      } else {
+        $('#adresseError').text('');
+        document.getElementById("adresse").style.borderColor = "green";
+      }
+  
+      if (codePostal.trim() === '') {
+        document.getElementById("codePostal").style.borderColor = "red";
+        $('#codePostalError').text('Ce champ est obligatoire.');
+        isValid = false;
+      } else {
+        $('#codePostalError').text('');
+        document.getElementById("codePostal").style.borderColor = "green";
+      }
+  
+      if (gsmClient.trim() === '') {
+        document.getElementById("gsmClient").style.borderColor = "red";
+        $('#gsmClientError').text('Ce champ est obligatoire.');
+        isValid = false;
+      } else {
+        $('#gsmClientError').text('');
+        document.getElementById("gsmClient").style.borderColor = "green";
+      }
+      var identifiant = document.getElementById("identifiant").value;
+      var email = document.getElementById("emailClient").value;
+      var codePostal = document.getElementById("codePostal").value;
+      var gsmClient = document.getElementById("gsmClient").value;
+     
+      // Validation expressions
+      var identifiantRegex = /^[01]\d{7}$/;
+      var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      var codePostalRegex = /^\d{4}$/;
+      var gsmClientRegex = /^\d{8}$/;
+  
+      // Perform validation
+      var isValid = true;
+  
+      if (!identifiantRegex.test(identifiant)) {
+        isValid = false;
+        document.getElementById("identifiantError").textContent = "L'identifiant doit commencer par 0 ou 1 et contenir 8 chiffres.";
+      } else {
+        document.getElementById("identifiantError").textContent = "";
+      }
+  
+      if (!emailRegex.test(email)) {
+        isValid = false;
+        document.getElementById("emailError").textContent = "Veuillez entrer une adresse e-mail valide.";
+      } else {
+        document.getElementById("emailError").textContent = "";
+      }
+  
+      if (!codePostalRegex.test(codePostal)) {
+        isValid = false;
+        document.getElementById("codePostalError").textContent = "Le code postal doit contenir 4 chiffres.";
+      } else {
+        document.getElementById("codePostalError").textContent = "";
+      }
+  
+      if (!gsmClientRegex.test(gsmClient)) {
+        isValid = false;
+        document.getElementById("gsmClientError").textContent = "Le numéro de téléphone mobile doit contenir 8 chiffres.";
+      } else {
+        document.getElementById("gsmClientError").textContent = "";
+      }
+      if (!gsmClientRegex.test(gsmClient)) {
+        isValid = false;
+        document.getElementById("numeroAppel").textContent = "Le numéro de téléphone mobile doit contenir 8 chiffres.";
+      } else {
+        document.getElementById("numeroAppel").textContent = "";
+      }
+  
+      if (isValid && identifiant !== "" && email !== "" && codePostal !== "" && gsmClient !== "") {
+        showStep('step3');
+      }
+    }
+       
+    function validateStep3() {
+        var nomProprietaireLigne = document.getElementById("nomProprietaireLigne").value;
+        var numeroAppel = document.getElementById("numeroAppel").value;
+        var produit = document.getElementById("produit").value;
+        var paiement = document.getElementById("paiement").value;
+    
+        var isValid = true;
+    
+        if (nomProprietaireLigne.trim() === "") {
+            document.getElementById("nomProprietaireLigneValide").classList.remove("error1");
+            isValid = false;
+            document.getElementById("nomProprietaireLigneValide").classList.remove("error1");
+            document.getElementById("nomProprietaireLigneError").textContent = "Veuillez saisir le nom du propriétaire de la ligne.";
+            document.getElementById("nomProprietaireLigneValide").classList.remove("error1");
+        } else {
+            document.getElementById("nomProprietaireLigneValide").classList.remove("error1");
+            document.getElementById("nomProprietaireLigneValide").textContent = "✓ Valide";
+            document.getElementById("nomProprietaireLigneValide").classList.remove("error1");
+        }
+    
+        if (numeroAppel.trim() === "") {
+            isValid = false;
+            document.getElementById("valid-msg-numero-appel").classList.add("error1");
+            document.getElementById("error-msg-numero-appel").classList.remove("error2");
+            document.getElementById("error-msg-numero-appel").textContent = "Veuillez remplir le champ du numéro de téléphone ADSL.";
+        } else if (numeroAppel.length !== 8 || isNaN(numeroAppel)) {
+            isValid = false;
+            document.getElementById("valid-msg-numero-appel").classList.add("error1");
+            document.getElementById("error-msg-numero-appel").classList.remove("error2");
+            document.getElementById("error-msg-numero-appel").textContent = "Le numéro de téléphone ADSL doit contenir 8 chiffres.";
+        } else {
+            document.getElementById("valid-msg-numero-appel").classList.remove("error1");
+            document.getElementById("error-msg-numero-appel").classList.remove("error2");
+            document.getElementById("valid-msg-numero-appel").textContent = "✓ Valide";
+        }
+    
+        if (isValid) {
+            showStep('step4');
+        }
+    }
+
+  </script>
+<!-- Add this before your existing JavaScript code -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+<br><br><br><br><br><br><br><br><br><br>
+</body></html>
+{% endblock %}

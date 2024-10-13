@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  </head>
+  <style>
+    /* CSS pour flouter l'arrière-plan lorsque le modal est ouvert */
+    .modal-backdrop {
+        backdrop-filter: blur(5px); /* Ajustez la valeur pour contrôler le niveau de flou */
+    }
+</style>
+  <body>
+     <!-- Navigation-->
+     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+      <div class="container">
+          <a class="navbar-brand" href="{% url 'service_and_map'  %}" >
+              <img id="globalnet-img" src="{% static 'img/gnet.png' %}" class="img-fluid" style="border-radius: 10px; width: 200px; ">
+          </a>               
+           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+              Menu
+              <i class="fas fa-bars ms-1"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+              <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                <li class="nav-item"><a class="nav-link"  href="/" onclick="toggleNavbar()" >Map</a></li>
+                  <li class="nav-item"><a class="nav-link"  href="/services" onclick="toggleNavbar()" >Services</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                  <li class="nav-item" ><a class="nav-link" >
+                      {% if user.is_authenticated %}
+                      <p style="color: white; font-weight: bold; text-shadow: 0 0 5px white; font-size: 24px;right:500%;">Hi {{ user.username }}!</p>
+                      <a href="/signout" class="form-control btn btn-primary submit px-3" >Logout</a>
+                    </a>
+      {% else %}
+        <a href="/signin" class="btn btn-primary"><span class="glyphicon glyphicon-log-in" style=""></span>Login</a> 
+        <a href="/signup" class="btn btn-success" >Signup</a>
+      {% endif %}
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </nav>
+    <section class="page-section" id="map">
+        <div class="container">
+            <div class="row mt-4">
+                <div class="col-md-8 offset-md-1">
+                    <h1 class="text-center" style="text-shadow: 0 0 1rem orange;">Localisation de globalnet en Tunisie...</h1>
+                            {{ map_html | safe }}
+
+                    <br>
+                </div>
+            </div>
+        </div>
+    </section>
+       
+    <div class="container">
+      <div class="text-center">
+          <h2 class="section-heading text-uppercase">Services</h2>
+          <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+      </div>
+      <div class="row text-center">
+          <div class="col-md-4">
+              <span class="fa-stack fa-4x">
+                  <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                  <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
+              </span>
+              <h4 class="my-3">E-Commerce</h4>
+              <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+          </div>
+          <div class="col-md-4">
+              <span class="fa-stack fa-4x">
+                  <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                  <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
+              </span>
+              <h4 class="my-3">Responsive Design</h4>
+              <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+          </div>
+          <div class="col-md-4">
+              <span class="fa-stack fa-4x">
+                  <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                  <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
+              </span>
+              <h4 class="my-3">Web Security</h4>
+              <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+          </div>
+      </div>
+  </div> 
+ 
+<br>
+<h1 class="text-center" style="text-shadow: 0 0 1rem orange;">Liste des services</h1>
+<br><br>
+<div class="row" style="margin-right: -15px; margin-left: -15px;">
+    
+  <div class="elmt col-lg-2 col-md-2 col-sm-2 col-xs-6 text-center">
+    <!-- Contenu de la div -->
+
+        <select class="select" name="gouvernorat" id="gouvernorat" style="border-radius: 10px;">
+            <option value="0">Gouvernorat</option>
+            <option value="1">ARIANA</option>
+            <option value="2">BEJA</option>
+            <option value="3">BEN AROUS</option>
+            <option value="4">BIZERTE</option>
+            <option value="5">GABES</option>
+            <option value="6">GAFSA</option>
+            <option value="7">JENDOUBA</option>
+            <option value="8">KAIROUAN</option>
+            <option value="9">KASSERINE</option>
+            <option value="10">KEBILI</option>
+            <option value="11">KEF</option>
+            <option value="12">MAHDIA</option>
+            <option value="13">MANOUBA</option>
+            <option value="14">MEDENINE</option>
+            <option value="15">MONASTIR</option>
+            <option value="16">NABEUL</option>
+            <option value="17">SFAX</option>
+            <option value="18">SIDI BOUZID</option>
+            <option value="19">SILIANA</option>
+            <option value="20">SOUSSE</option>
+            <option value="21">TATAOUINE</option>
+            <option value="22">TOZEUR</option>
+            <option value="23">TUNIS</option>
+            <option value="24">ZAGHOUAN</option>
+        </select>
+    </div>
+
+    <div id="villes" class="elmt col-lg-2 col-md-2 col-sm-2 col-xs-6">
+        <center>
+            <select name="ville" id="ville" style="border-radius: 10px;">
+                <option value="0"selected="">Localité</option>
+                <option value="1" >ARIANA</option>
+                <option value="2">BORJ LOUZIR</option>
+                <option value="3">CITE ETTADAMAN</option>
+                <option value="4">EL MENZAH 6</option>
+                <option value="5">ENNASR</option>
+                <option value="6">NKHILET</option>
+            </select>
+        </center>
+    </div>
+
+    <div id="type_pdv" class="elmt col-lg-2 col-md-2 col-sm-2 col-xs-6" style="border-radius: 10px;">
+        <select name="pdv" id="pdv" style="border-radius: 10px;">
+            <option value="0">Type</option>
+            <option value="1">Agence</option>
+            <option value="2">Revendeur</option>
+        </select>
+    </div>
+        <button type="button" class="buttons elmt col-lg-2 col-md-3 col-sm-3 col-xs-6" id="btn" style="text-decoration: none; color: white; background: #ec623c; border-radius: 10px; display: flex; margin-left: 45px; justify-content: center;"> Chercher</button>
+</div>
+<br>
+<div class="container">
+    <div class="row">
+      <!-- Map div -->
+      <div id="service-container" class="col-lg-8 col-md-12 col-sm-12" style="height: 500px; display: none;"></div>
+        {% for service in services %}
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <h2 style="color: #ec623c;">{{ service.titre }}</h2>
+          <p>Adresse : {{ service.address }}</p>
+          <p>Téléphone : {{ service.telephone }}</p>
+          <p>Horaires :<br>{{ service.hours|linebreaksbr }}</p>
+          <p>Horaires :<br>{{ service.gouvernorat }}</p>
+          <a href="{% url 'service_detail' service.pk %}" class="btn btn-secondary" role="button" style="text-decoration: none;">Voir détails</a>
+  
+          <button class="btn btn-primary location-button" onclick="openLocationInIframe('{{ service.gouvernorat }}')">Voir sur la carte</button>
+          <hr>
+        </div>
+        {% empty %}
+        <div class="col-lg-12">
+          <p>Aucun service disponible.</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mapModalLabel">Location Map</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="modalMap" style="height: 400px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    function searchService() {
+        var selectedGouvernorat = document.getElementById('gouvernorat').value;
+        var selectedLocalite = document.getElementById('ville').value;
+        var selectedType = document.getElementById('pdv').value;
+    
+        // Check if selected values match the desired criteria
+        if (selectedGouvernorat !== '0' && selectedLocalite !== '0' && selectedType !== '0') {
+          // Criteria matched, display the service information
+          var serviceContainer = document.getElementById('service-container');
+          serviceContainer.style.display = 'block';
+        } else {
+          // Criteria not matched, hide the service information
+          var serviceContainer = document.getElementById('service-container');
+          serviceContainer.style.display = 'none';
+        }
+      }
+    
+      // Event listener for the "Chercher" button
+      document.getElementById('btn').addEventListener('click', searchService);
+    
+  // Function to open location in a popup window
+  function openLocationInIframe(gouvernorat) {
+    var iframeUrl = '';
+        switch (gouvernorat) {
+          case '1':
+          iframeUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51070.3742152529!2d10.129160200803174!3d36.868850939958676!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12e2cb4e31471bf3%3A0x65bc5efbce842198!2sAriana!5e0!3m2!1sfr!2stn!4v1690162493970!5m2!1sfr!2stn';
+          break;
+    
+          case '2':
+          iframeUrl = 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12791.65949970197!2d9.1935209!3d36.7246056!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fca778a9789f89%3A0x225869a9b4e18115!2zQsOpamE!5e0!3m2!1sfr!2stn!4v1690161008916!5m2!1sfr!2stn';
+          break;
+    
+          case '3':
+          iframeUrl =  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25576.029698013182!2d10.214047292163613!3d36.74648197476253!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd496f233f4109%3A0x3bfd822b0ccc697b!2sBen%20Arous!5e0!3m2!1sfr!2stn!4v1690161167490!5m2!1sfr!2stn';
+          break;
+          
+          case '4':
+          iframeUrl =   'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50793.49561308769!2d9.820304606130644!3d37.281066010854154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12e31e4db2105f13%3A0xf44361a00609c69e!2sBizerte!5e0!3m2!1sfr!2stn!4v1690161312819!5m2!1sfr!2stn';
+          break;
+          
+          case '5':
+          iframeUrl =  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26496.116952235356!2d10.082058633372107!3d33.88927733596541!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12556fc5487bd237%3A0x4980e09bdb547a86!2zR2Fiw6hz!5e0!3m2!1sfr!2stn!4v1690161354870!5m2!1sfr!2stn';
+          break;
+          
+          case '6':
+          iframeUrl ='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d52654.84771856146!2d8.732460820308244!3d34.42858439218387!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12f896fa5476901f%3A0x873608732b8975d5!2sGafsa!5e0!3m2!1sfr!2stn!4v1690161414568!5m2!1sfr!2stn';
+          break;
+          
+          case '7':
+          iframeUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25656.853963039193!2d8.758291941391414!3d36.50328527929234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fb124ea3099bff%3A0x6bef4f37f93342da!2sJendouba!5e0!3m2!1sfr!2stn!4v1690161466936!5m2!1sfr!2stn';
+          break;
+          
+          case '8':
+          iframeUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51858.34636183324!2d10.063247485639442!3d35.67339093266665!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fdc54531303f79%3A0xbba4cacca78e555e!2sKairouan!5e0!3m2!1sfr!2stn!4v1690161517910!5m2!1sfr!2stn';
+          break;
+          
+          case '9':
+          iframeUrl ='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d52183.25087204551!2d8.783568229386022!3d35.170255875348104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12f93e03277f3b3d%3A0x9165782c2e6df471!2sKasserine!5e0!3m2!1sfr!2stn!4v1690161575022!5m2!1sfr!2stn';
+          break;
+          
+          case '10':
+          iframeUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26553.632883185728!2d8.952912932822452!3d33.70366699053808!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12566e541bcc6359%3A0x79fc96a6bcfd0b81!2sKebili!5e0!3m2!1sfr!2stn!4v1690161625535!5m2!1sfr!2stn';
+          break;
+    
+          case '11':
+          iframeUrl ='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51535.80309474784!2d8.661121441846861!3d36.166854092908075!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fba448bbb60817%3A0xd20dcc094b5debbf!2sLe%20Kef!5e0!3m2!1sfr!2stn!4v1690161681734!5m2!1sfr!2stn';
+          break;
+    
+          case '12':
+          iframeUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25983.853658071424!2d11.031457388267098!3d35.5047305492255!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x130223f5186c6cf9%3A0x675f7b734dffa5bb!2sMahdia!5e0!3m2!1sfr!2stn!4v1690161732548!5m2!1sfr!2stn';
+          break;
+    
+          case '13':
+          iframeUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25554.883240564603!2d10.057060492365647!3d36.809882723602634!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd326a6997b651%3A0xae1949b938bf5487!2sManouba!5e0!3m2!1sfr!2stn!4v1690161779117!5m2!1sfr!2stn';
+          break;
+    
+          case '14':
+          iframeUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26663.488148469514!2d10.470657131772615!3d33.346621299535876!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1254d62866735147%3A0xf085df215e783c40!2zTcOpZGVuaW5l!5e0!3m2!1sfr!2stn!4v1690161837913!5m2!1sfr!2stn';
+          break;
+    
+          case '15':
+          iframeUrl =  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51805.747524528735!2d10.769239886651745!3d35.75426482600761!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x130212b61d744f59%3A0xf284743e1d3e40ef!2sMonastir!5e0!3m2!1sfr!2stn!4v1690161884565!5m2!1sfr!2stn';
+          break;
+    
+          case '16':
+          iframeUrl =   'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51347.4214745577!2d10.674141995472054!3d36.452388120858046!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13029895efbdd3d3%3A0x2e5d60d1569ce4fe!2zTmFiZXVs4oCO!5e0!3m2!1sfr!2stn!4v1690161932646!5m2!1sfr!2stn';
+          break;
+    
+          case '17':
+          iframeUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d104888.66472350853!2d10.650697107836029!3d34.76136674512708!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13002cda1486c695%3A0x22dfe0a62c50ce6f!2sSfax!5e0!3m2!1sfr!2stn!4v1690161978556!5m2!1sfr!2stn';
+          break;
+    
+          case '18':
+          iframeUrl ='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26134.510395184247!2d9.456438086827541!3d35.03638780930888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fec340b61767fd%3A0xcc600169ded4578c!2sSidi%20Bouzid!5e0!3m2!1sfr!2stn!4v1690162028832!5m2!1sfr!2stn';
+          break;
+    
+          case '19':
+          iframeUrl ='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25794.19356117242!2d9.34464429007924!3d36.08680348734599!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fc654a8737e17f%3A0xdd533dfbcc5e23ef!2sSiliana!5e0!3m2!1sfr!2stn!4v1690162072757!5m2!1sfr!2stn';
+          break;
+    
+          case '20':
+          iframeUrl ='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51757.488015523035!2d10.576854687580534!3d35.82832751995853!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x130275759ac9d10d%3A0x698e3915682cef7d!2sSousse!5e0!3m2!1sfr!2stn!4v1690162115151!5m2!1sfr!2stn';
+          break;
+    
+          case '21':
+          iframeUrl ='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d53584.013292339085!2d10.401305202419293!3d32.9245762918811!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1254b7596be92873%3A0xd94cf811d4ad762d!2sTataouine!5e0!3m2!1sfr!2stn!4v1690162155840!5m2!1sfr!2stn';
+          break;
+    
+          case '22':
+          iframeUrl ='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d52973.964524051466!2d8.07864086416489!3d33.918673640823116!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1257c028313d134d%3A0xc48c27f26a58203!2sTozeur!5e0!3m2!1sfr!2stn!4v1690162200227!5m2!1sfr!2stn';
+          break;
+    
+          case '23':
+          iframeUrl ='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d102239.59408227033!2d10.060876261246396!3d36.79485453000938!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd337f5e7ef543%3A0xd671924e714a0275!2sTunis!5e0!3m2!1sfr!2stn!4v1690162255895!5m2!1sfr!2stn';
+          break;
+    
+          case '24':
+          iframeUrl ='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25688.106095827225!2d10.115652541092835!3d36.40887443108525!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd110c5ea382cd%3A0x16f187f18150bf27!2sZaghouan!5e0!3m2!1sfr!2stn!4v1690162294920!5m2!1sfr!2stn';
+        }
+         
+    var iframe = '<iframe src="' + iframeUrl + '" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+    document.getElementById('modalMap').innerHTML = iframe;
+    $('#modalMap').attr('src', iframeUrl);
+    $('#mapModal').modal('show');
+  }
+
+
+</script>
+
+{% endblock content%}
+{% endblock body %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+  </body>
+</html>

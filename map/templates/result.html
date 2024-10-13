@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="text-center" style="text-shadow: 0 0 1rem orange;">Résultats</h1>
+    <br><br>
+    <h2>Clients</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Client ID</th>
+          <th>Nom et Prénom</th>
+          <th>Type d'identifiant</th>
+          <th>Identifiant</th>
+          <th>Email</th>
+          <th>Gouvernorat</th>
+          <th>Adresse</th>
+          <th>Code Postal</th>
+          <th>N° Téléphone Mobile</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for client in clients %}
+          <tr>
+            <td>{{ client.id }}</td>
+            <td>{{ client.nom_client }}</td>
+            <td>{{ client.type_identifiant }}</td>
+            <td>{{ client.identifiant }}</td>
+            <td>{{ client.email_client }}</td>
+            <td>{{ client.gouvernorat }}</td>
+            <td>{{ client.adresse }}</td>
+            <td>{{ client.code_postal  }}</td>
+            <td>{{ client.gsm_client }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h2>Offres</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Offre ID</th>
+          <th>Nom de l'offre</th>
+          <th>Prix</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for offre in offres %}
+          <tr>
+            <td>{{ offre.id }}</td>
+            <td>{{ offre.nom_proprietaire_ligne }}</td>
+            <td>{{ offre.numero_appel }}</td>
+            <td>{{ offre.produit }}</td>
+            <td>{{ offre.paiement }}</td>
+            
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h2>Modems</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Modem ID</th>
+          <th>Numéro de série</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for modem in modems %}
+          <tr>
+            <td>{{ modem.id }}</td>
+            <td>{{ modem.recuperer_modem }}</td>
+            <td>{{ modem.agence }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
